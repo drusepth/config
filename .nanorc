@@ -1,0 +1,61 @@
+unset quiet
+
+# UI
+set morespace
+set const # Always show cursor coordinates
+set multibuffer
+set nohelp
+set quickblank
+set smooth
+
+# Writing
+set autoindent
+set fill -8
+set softwrap
+unset mouse
+unset nowrap
+set smarthome
+set tabsize 2
+set tabstospaces
+set undo
+set wordbounds
+
+# Search
+set backwards # backwards searches by default
+set regexp # regex searches by default
+unset casesensitive
+
+# Saving
+unset backup
+unset historylog
+unset nofollow
+unset nonewlines
+set suspend
+
+# Syntax highlighting
+include "/usr/share/nano/c.nanorc"
+include "/usr/share/nano/html.nanorc"
+include "/usr/share/nano/patch.nanorc"
+include "/usr/share/nano/perl.nanorc"
+include "/usr/share/nano/python.nanorc"
+include "/usr/share/nano/ruby.nanorc"
+include "/usr/share/nano/java.nanorc"
+color red "\<[-+]?([1-9][0-9]*|0)?\>"
+
+# XML
+syntax "ml" ".*\.([jrs]?html?|xml|sgml?)$"
+color white "^.+$"
+color green  start="<" end=">"
+color cyan   "<[^> ]+"
+color cyan   ">"
+color yellow start="<!DOCTYPE" end="[/]?>"
+color yellow start="<!--" end="-->"
+color red    "&[^;]*;"
+
+# CSS
+syntax "css" "\.css$"
+color brightred "."
+color brightyellow start="\{" end="\}"
+color brightwhite start=":" end="[;^\{]"
+color brightblue start="\/\*" end="\\*/"
+color green ";|:|\{|\}"
