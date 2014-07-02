@@ -47,4 +47,4 @@ eval "$(rbenv init -)"
 
 # Git branch in command prompt
 source /etc/bash_completion.d/git
-export PS1='\w$(__git_ps1 " (%s)")$ '
+export PS1='\w\[\033[01;38m\]$(__git_ps1)\[\033[01;34m\]\$\[\033[00m\] '
