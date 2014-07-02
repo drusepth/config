@@ -47,4 +47,5 @@ eval "$(rbenv init -)"
 
 # Git branch in command prompt
 source /etc/bash_completion.d/git
+export GIT_PS1_SHOWDIRTYSTATE=1
 export PS1='\w\[\033[01;38m\]$(__git_ps1)\[\033[01;34m\]\$\[\033[00m\] '
