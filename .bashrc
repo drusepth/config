@@ -33,6 +33,9 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
+if [ -f ~/.chef-ninja ]; then
+    . ~/.chef-ninja
+fi
 
 # ls after each cd
 cd() {
@@ -42,6 +45,9 @@ cd() {
 bcd() {
   builtin cd "$@"
 }
+
+# Alias repeat x for running x over and over
+function repeat() { while 1 ; do "$@" ; done; }
 
 # a pretty ls truncated to at most N lines; helper function for cd, popd, pushd
 _truncated_ls() {
@@ -96,3 +102,5 @@ eval "$(rbenv init -)"
 source /etc/bash_completion.d/git-prompt
 export GIT_PS1_SHOWDIRTYSTATE=1
 export PS1='\w\[\033[01;38m\]$(__git_ps1)\[\033[01;34m\]\$\[\033[00m\] '
+
+export EDITOR=nano

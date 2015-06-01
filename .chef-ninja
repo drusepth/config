@@ -1,0 +1,3 @@
+alias cap="bundle exec cap"
+
+alias servers="cap cloud:servers:list"
