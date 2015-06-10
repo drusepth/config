@@ -1,3 +1,10 @@
 alias cap="bundle exec cap"
+alias knife="bundle exec knife"
 
 alias servers="cap cloud:servers:list"
+
+alias running="grep running"
+alias dead="grep terminated"
+
+alias staging="env=staging"
+alias prod="env=production"
