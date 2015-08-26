@@ -39,7 +39,7 @@ fi
 
 # ls after each cd
 cd() {
-  echo && builtin cd "$@" && _truncated_ls;
+  echo && builtin cd "$@" && _truncated_ls && echo;
 }
 # but allow not ls'ing if we don't want to
 bcd() {
