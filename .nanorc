@@ -40,6 +40,7 @@ include "/usr/share/nano/perl.nanorc"
 include "/usr/share/nano/python.nanorc"
 include "/usr/share/nano/ruby.nanorc"
 include "/usr/share/nano/java.nanorc"
+include "/usr/share/nano/lua.nanorc"
 color red "\<[-+]?([1-9][0-9]*|0)?\>"
 
 # XML
