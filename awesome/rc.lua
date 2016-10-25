@@ -2,6 +2,7 @@
 require("awful")
 require("awful.autofocus")
 require("awful.rules")
+require("awful.remote")
 -- Theme handling library
 require("beautiful")
 -- Notification library
@@ -39,7 +40,6 @@ end
 -- Themes define colours, icons, and wallpapers
 beautiful.init("/home/drusepth/.config/awesome/themes/holo/theme.lua")
 theme.wallpaper_cmd = { "awsetbg /home/drusepth/Wallpapers/wallhaven-45287.jpg" }
- 
 
 -- This is used later as the default terminal and editor to run.
 terminal = "x-terminal-emulator"
@@ -73,8 +73,20 @@ layouts =
 tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ "1:app", "2:editor", "3:consoles", "4:servers", "5:browser",
-    "6:swap-editor", "7:swap-app", "8:swap-servers", "9:chat"
+    tags[s] = awful.tag({
+      -- Work-related
+      "1:app", 
+      "2:api",
+      "3:webapp",
+      "4:consoles",
+      "5:servers",
+      "6:chat",
+      
+      -- Personal
+      "7:app",
+      "8:editor",
+      "9:consoles",
+      "X:servers"
     }, 
     s, 
     layouts[1])
@@ -113,8 +125,7 @@ mymainmenu = awful.menu({ items = {
                                   }
                         })
 
-mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
-                                     menu = mymainmenu })
+mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon), menu = mymainmenu })
 -- }}}
 
 -- {{{ Wibox
@@ -136,6 +147,33 @@ function execute_command(command)
   end
   io.close(fh)
   return str
+end
+
+background_timers = {}
+function run_background(cmd)
+   local r = io.popen("mktemp")
+   local logfile = r:read("*line")                                                
+   r:close()                                                                      
+                                                                                  
+   cmdstr = cmd .. " &> " .. logfile .. " & "                                     
+   local cmdf = io.popen(cmdstr)                                                  
+   cmdf:close()                                                                   
+   background_timers[cmd] = {                                                     
+       file  = logfile,                                                           
+       timer = timer{timeout=1}                                                   
+   }                                                                              
+   background_timers[cmd].timer:add_signal("timeout",function()                   
+       local cmdf = io.popen("pgrep -f '" .. cmd .. "'")                          
+       local s = cmdf:read("*all")                                                
+       cmdf:close()                                                               
+       if (s=="") then                                                            
+           background_timers[cmd].timer:stop()                                    
+           local lf = io.open(background_timers[cmd].file)                        
+           lf:close()
+           io.popen("rm " .. background_timers[cmd].file)                                                            
+       end                                                                        
+   end)                                                                           
+   background_timers[cmd].timer:start()                                           
 end
 
 mytimer = timer({ timeout = 60 })
@@ -173,10 +211,19 @@ for s = 1, screen.count() do
 
     -- Create the wibox
     mywibox[s] = awful.wibox({ position = "top", screen = s })
+    -- Set up pomodoro tracker
+    pomodoro = awful.widget.progressbar()
+    pomodoro:set_max_value(100)
+    pomodoro:set_background_color('#494B4F')
+    pomodoro:set_color('#AECF96')
+    pomodoro:set_gradient_colors({ '#AECF96', '#88A175', '#FF5656' })
+    pomodoro:set_ticks(true)
+
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets = {
         {
-            mylauncher,
+            pomodoro.widget,
+            -- mylauncher,
             mytaglist[s],
             mypromptbox[s],
             layout = awful.widget.layout.horizontal.leftright
@@ -234,6 +281,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),
+    awful.key({ modkey,           }, "p",     function () run_background("~/.config/awesome/pomodoro.sh") end),
 
     awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end),
     awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)    end),
@@ -259,7 +307,7 @@ globalkeys = awful.util.table.join(
 
     -- Brightness
     awful.key({ }, "XF86MonBrightnessDown", function () awful.util.spawn("xbacklight -dec 15") end),
-    awful.key({ }, "XF86MonBrightnessUp", function () awful.util.spawn("xbacklight -inc 15") end)
+    awful.key({ }, "XF86MonBrightnessUp",   function () awful.util.spawn("xbacklight -inc 15") end)
 )
 
 clientkeys = awful.util.table.join(
