@@ -126,10 +126,20 @@ mysystray = widget({ type = "systray" })
 
 -- Create an info tray
 myinfotray = widget({ type = "textbox" })
-myinfotray.text = "yolo "
+myinfotray.text = "yolo"
+
+function execute_command(command)
+  local fh = io.popen(command)
+  local str = ""
+  for i in fh:lines() do
+    str = str .. i
+  end
+  io.close(fh)
+  return str
+end
 
 mytimer = timer({ timeout = 60 })
-mytimer:add_signal("timeout", function() myinfotray.text = awful.util.spawn("acpitool | head -n 1") end)
+mytimer:add_signal("timeout", function() myinfotray.text = execute_command("acpi") end)
 mytimer:start()
 
 

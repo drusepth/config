@@ -104,3 +104,12 @@ export GIT_PS1_SHOWDIRTYSTATE=1
 export PS1='\w\[\033[01;38m\]$(__git_ps1)\[\033[01;34m\]\$\[\033[00m\] '
 
 export EDITOR=nano
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
+
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"
+
+# added by travis gem
+[ -f /home/drusepth/.travis/travis.sh ] && source /home/drusepth/.travis/travis.sh
