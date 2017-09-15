@@ -39,7 +39,7 @@ end
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
 beautiful.init("/home/drusepth/.config/awesome/themes/holo/theme.lua")
-theme.wallpaper_cmd = { "awsetbg /home/drusepth/Wallpapers/wallhaven-45287.jpg" }
+theme.wallpaper_cmd = { "awsetbg /home/drusepth/Images/clouds.jpg" }
 
 -- This is used later as the default terminal and editor to run.
 terminal = "x-terminal-emulator"
@@ -74,19 +74,20 @@ tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
     tags[s] = awful.tag({
-      -- Work-related
+      -- Indent Labs
       "1:app", 
-      "2:api",
-      "3:webapp",
-      "4:consoles",
-      "5:servers",
-      "6:chat",
-      
+      "2:editor",
+      "3:consoles",
+      "4:servers",
+      "5:social",
+
       -- Personal
-      "7:app",
-      "8:editor",
-      "9:consoles",
-      "X:servers"
+      "6:chat",
+      "7:browser",
+      "8:writing",
+      
+      -- Etc
+      "9:swap"
     }, 
     s, 
     layouts[1])
